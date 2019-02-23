@@ -62,10 +62,13 @@ function parseRow(buffer, offset, rowHeaders, decoder) {
   return out;
 }
 
-module.exports = function(buffer, encoding) {
+module.exports = function(buffer, encoding, parseRowHeaderOnly) {
   var decoder = createDecoder(encoding);
   var header = dbfHeader(buffer);
   var rowHeaders = dbfRowHeader(buffer, header.headerLen - 1, decoder);
+  if(parseRowHeaderOnly){
+    return rowHeaders;
+  }
 
   var offset = ((rowHeaders.length + 1) << 5) + 2;
   var recLen = header.recLen;
